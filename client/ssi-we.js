@@ -48,12 +48,18 @@ const run = () => {
         const elements = document.querySelectorAll('[data-we-event]');
         elements.forEach((el) => {
             const event = el.getAttribute('data-we-event') || 'click';
+            const name = el.getAttribute('data-we-name');
+            if (!name) {
+                console.warn('ssi-we: Element without name' + el.tagName.toLowerCase());
+                return;
+            }
             el.addEventListener(event, (e) => {
                 const _p = el.getAttribute('data-we-params');
                 const p = _p ? mergeObjects(window.ssiWe?.params, JSON.parse(_p)) : window.ssiWe?.params;
                 sendEvent(s, {
                     page: window.ssiWe.page,
                     type: e.type,
+                    name: name,
                     element: el.tagName.toLowerCase(),
                     params: p,
                     user: window.ssiWe?.user
@@ -80,6 +86,7 @@ const run = () => {
         sendEvent(socket, {
             page: window.ssiWe.page,
             type: 'open',
+            name: 'open',
             element: 'window',
             params: window.ssiWe?.params,
             user: window.ssiWe?.user
