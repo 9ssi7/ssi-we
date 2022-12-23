@@ -10,7 +10,7 @@ RUN go build ./main.go
 
 FROM alpine:latest AS runner
 
-ARG PORT=8080
+ENV PORT 8080
 
 WORKDIR /app
 
