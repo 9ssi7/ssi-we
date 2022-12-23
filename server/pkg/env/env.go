@@ -2,7 +2,6 @@ package env
 
 import (
 	"github.com/spf13/viper"
-	"github.com/ssibrahimbas/ssi-we/pkg/helper"
 )
 
 func LoadEnv(path string, c interface{}) {
@@ -11,7 +10,11 @@ func LoadEnv(path string, c interface{}) {
 	viper.SetConfigType("env")
 	viper.AutomaticEnv()
 	err := viper.ReadInConfig()
-	helper.CheckErr(err)
+	if err != nil {
+		return
+	}
 	err = viper.Unmarshal(&c)
-	helper.CheckErr(err)
+	if err != nil {
+		return
+	}
 }
