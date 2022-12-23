@@ -4,7 +4,7 @@ This is a simple web application that allows you to track events and their atten
 
 under development.
 
-## Target Use Case
+##  Target Use Case
 
 ```html
 <html>
