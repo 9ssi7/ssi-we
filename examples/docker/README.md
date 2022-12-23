@@ -17,7 +17,7 @@ docker pull ssibrahimbas/ssi-we
 ## Run the container
 
 ```bash
-docker run -d -p 8080:8080 ssibrahimbas/ssi-we
+docker run --env-file ./app.env -p 8080:8080 ssibrahimbas/ssi-we
 ```
 
 ## Open the application
