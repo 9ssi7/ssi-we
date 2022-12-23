@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>SSI WE Test</title>
+  </head>
+  <body>
+    <h2>Hello Web Events</h2>
+
+    <button
+      data-we-event="click"
+      data-we-name="test"
+      data-we-params-name="my-button"
+      data-we-params-id="33"
+      data-we-params-type="hidden"
+    >
+      Click btn
+    </button>
+
+    <script type="text/javascript">
+      window.ssiWe = {
+        url: "localhost:3000",
+        page: "index.html",
+        debug: false,
+        user: {
+          id: "123",
+          name: "John Doe",
+          email: "info@john.com",
+        },
+      };
+    </script>
+    <script
+      src="../client/ssi-we.js"
+      type="text/javascript"
+      defer
+      async
+    ></script>
+  </body>
+</html>
