@@ -57,6 +57,23 @@ Configuration must be before cdn. And be careful not to import before the DOM is
 
 ##  Configuration
 
+### Server Configuration
+
+| Name                   | Type   | Description             | Default | Required |
+| ---------------------- | ------ | ----------------------- | ------- | -------- |
+|  HOST                  | string | Server host             | x       | true     |
+| PORT                   | string | Server port             | x       | true     |
+| MONGO_HOST             | string | MongoDB host            | x       | true     |
+| MONGO_PORT             | string | MongoDB port            | x       | true     |
+| MONGO_USER             | string | MongoDB user            | x       | true     |
+| MONGO_PASSWORD         | string | MongoDB password        | x       | true     |
+| MONGO_DB               | string | MongoDB database name   | x       | true     |
+| MONGO_COLLECTION       | string | MongoDB collection name | x       | true     |
+| CORS_ALLOW_ORIGINS     | string | CORS allow origins      | x       | true     |
+| CORS_ALLOW_METHODS     | string | CORS allow methods      | x       | true     |
+| CORS_ALLOW_HEADERS     | string | CORS allow headers      | x       | true     |
+| CORS_ALLOW_CREDENTIALS | string | CORS allow credentials  | x       | true     |
+
 ### Client Configuration
 
 | Name              | Type    | Description                     | Default | Required |
