@@ -1,23 +1,30 @@
 package internal
 
 import (
+	"encoding/json"
 	"log"
 
 	"github.com/gofiber/websocket/v2"
+	"github.com/ssibrahimbas/ssi-we/src/dto"
 )
 
 func (h *Handler) listenAnyEvent(c *websocket.Conn) {
 	var (
-		mt  int
 		msg []byte
 		err error
 	)
+	ip := c.Locals("IpAddr").(string)
 	for {
-		if mt, msg, err = c.ReadMessage(); err != nil {
+		if _, msg, err = c.ReadMessage(); err != nil {
 			log.Println("read:", err)
 			break
 		}
-		log.Printf("recv: %s", msg)
-		log.Printf("msg type: %d", mt)
+		dto := &dto.EventCreateRequest{}
+		if err := json.Unmarshal(msg, dto); err != nil {
+			log.Println("json unmarshal:", err)
+			break
+		}
+		dto.IP = ip
+		h.s.Create(dto)
 	}
 }

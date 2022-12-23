@@ -48,14 +48,15 @@ func (a *App) loadConfig() {
 
 func (a *App) loadMongo() {
 	uri := db.CalcMongoUri(db.UriParams{
-		Host: a.Cnf.Db.Host,
-		Port: a.Cnf.Db.Port,
-		User: a.Cnf.Db.Username,
-		Pass: a.Cnf.Db.Password,
-		Db:   a.Cnf.Db.Name,
+		Host: a.Cnf.MongoHost,
+		Port: a.Cnf.MongoPort,
+		User: a.Cnf.MongoUsername,
+		Pass: a.Cnf.MongoPassword,
+		Db:   a.Cnf.MongoName,
 	})
-	d, err := db.NewMongo(uri, a.Cnf.Db.Name)
+	d, err := db.NewMongo(uri, a.Cnf.MongoName)
 	helper.CheckErr(err)
+	d.Ping()
 	a.Mongo = d
 }
 
@@ -65,7 +66,7 @@ func (a *App) loadHttp() {
 
 func (a *App) loadInternal() {
 	a.Repo = internal.NewRepo(&internal.RepoParams{
-		Collection: a.Mongo.GetCollection(a.Cnf.Db.Collection),
+		Collection: a.Mongo.GetCollection(a.Cnf.MongoCollection),
 		DB:         a.Mongo,
 		Ctx:        context.TODO(),
 	})

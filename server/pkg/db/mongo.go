@@ -39,3 +39,9 @@ func (m *MongoDB) TransformId(id string) primitive.ObjectID {
 	}
 	return i
 }
+
+func (m *MongoDB) Ping() {
+	if err := m.c.Ping(m.ctx, nil); err != nil {
+		panic(err)
+	}
+}

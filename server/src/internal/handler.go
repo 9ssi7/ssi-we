@@ -37,10 +37,10 @@ func (h *Handler) Init() {
 
 func (h *Handler) cors() fiber.Handler {
 	return cors.New(cors.Config{
-		AllowOrigins:     h.c.Cors.AllowOrigins,
-		AllowMethods:     h.c.Cors.AllowMethods,
-		AllowHeaders:     h.c.Cors.AllowHeaders,
-		AllowCredentials: h.c.Cors.AllowCredentials,
+		AllowOrigins:     h.c.CorsAllowOrigins,
+		AllowMethods:     h.c.CorsAllowMethods,
+		AllowHeaders:     h.c.CorsAllowHeaders,
+		AllowCredentials: h.c.CorsAllowCredentials,
 	})
 }
 
@@ -48,6 +48,7 @@ func (h *Handler) wsHandshake() fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		if websocket.IsWebSocketUpgrade(c) {
 			c.Locals("allowed", true)
+			c.Locals("IpAddr", c.IP())
 			return c.Next()
 		}
 		return fiber.ErrUpgradeRequired

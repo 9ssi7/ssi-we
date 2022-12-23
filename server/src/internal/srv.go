@@ -28,6 +28,7 @@ func (s *Srv) Create(d *dto.EventCreateRequest) {
 		Element:   d.Element,
 		Type:      d.Type,
 		Params:    d.Params,
+		Name:      d.Name,
 		User:      d.User,
 		IP:        d.IP,
 		CreatedAt: time.Now(),
