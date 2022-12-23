@@ -18,15 +18,23 @@ const mergeObjects = (obj1, obj2) => {
     return Object.assign({}, obj1, obj2);
 }
 
+const warn = (isDebug, msg) => {
+    if (isDebug) {
+        console.warn(msg);
+    }
+}
+
 const run = () => {
-    if (validateParams(window.ssiWe)) {
-        console.warn('ssi-we: Invalid params');
+    if (!validateParams(window.ssiWe)) {
+        console.error('ssi-we: Invalid params');
         return;
     }
     const params = mergeObjects({
         reconnectDelay: 1000,
         reconnectAttempts: 5,
         reconnect: true,
+        openEvent: false,
+        debug: false,
     }, window.ssiWe);
     let socket = new WebSocket(`ws://${window.ssiWe.url}/ws`);
     let connection = false;
@@ -50,18 +58,22 @@ const run = () => {
             const event = el.getAttribute('data-we-event') || 'click';
             const name = el.getAttribute('data-we-name');
             if (!name) {
-                console.warn('ssi-we: Element without name' + el.tagName.toLowerCase());
+                warn(params.debug, 'ssi-we: Element without name property. In the element: ' + el.tagName.toLowerCase());
                 return;
             }
             el.addEventListener(event, (e) => {
-                const _p = el.getAttribute('data-we-params');
-                const p = _p ? mergeObjects(window.ssiWe?.params, JSON.parse(_p)) : window.ssiWe?.params;
+                const p = window.ssiWe?.params || {};
+                const paramsAttrs = el.getAttributeNames().filter((attr) => attr.startsWith('data-we-params-'));
+                paramsAttrs.forEach((attr) => {
+                    const key = attr.replace('data-we-params-', '');
+                    p[key] = el.getAttribute(attr);
+                });
                 sendEvent(s, {
                     page: window.ssiWe.page,
                     type: e.type,
                     name: name,
                     element: el.tagName.toLowerCase(),
-                    params: p,
+                    params: Object.keys(p).length > 0 ? p : undefined,
                     user: window.ssiWe?.user
                 });
             });
@@ -77,20 +89,23 @@ const run = () => {
     }
 
     const onOpen = (s) => {
+        s.send("Hello Server!")
         unListenAllEvents();
         listenAllEvents(s);
     }
 
     socket.onopen = () => {
         connection = true;
-        sendEvent(socket, {
-            page: window.ssiWe.page,
-            type: 'open',
-            name: 'open',
-            element: 'window',
-            params: window.ssiWe?.params,
-            user: window.ssiWe?.user
-        });
+        if (params.openEvent) {
+            sendEvent(socket, {
+                page: window.ssiWe.page,
+                type: 'open',
+                name: 'open',
+                element: 'window',
+                params: window.ssiWe?.params,
+                user: window.ssiWe?.user
+            });
+        }
         onOpen(socket);
     }
 
@@ -104,3 +119,4 @@ const run = () => {
         reconnect();
     }
 }
+ssiWeInit();
